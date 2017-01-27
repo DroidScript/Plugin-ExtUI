@@ -1,0 +1,37 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "24.0.1"
+
+    defaultConfig {
+        applicationId "com.mycompany.plugins.user"
+        minSdkVersion 8
+        targetSdkVersion 16
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+        applicationVariants.all { variant ->
+
+            variant.outputs.each { output ->
+                def apk = output.outputFile;
+                def newName = "ExtUI" + variant.baseName.replace("debug", "") + ".apk";
+                output.outputFile = new File(apk.parentFile, newName);
+            }
+
+//            if (variant.buildType.name == 'debug') {
+//                variant.assemble.doLast {
+//                    exec {
+//                        commandLine '/SDKs/Android3/platform-tools/adb', 'push', 'build/outputs/apk/MyPlugin.apk', '/sdcard/DroidScript/Plugins/MyPlugin.apk'
+//                    }
+//                }
+//            }
+        }
+    }
+
+}
+

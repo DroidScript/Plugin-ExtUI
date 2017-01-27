@@ -1,0 +1,270 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>ExtUI</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style type="text/css">
+	</style>
+</head>
+
+<body>
+
+<div data-role="page" data-theme="a">
+
+	<div data-role="header" data-position="fixed">
+		<a href='#' class='ui-btn-left' data-icon='arrow-l' data-theme="c" onclick="history.back(); return false">Back</a>
+		<h1>ExtUI</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">
+
+		<p>This plugin extends the native capabilities UI DroidScript.<br>
+			It allows work with API Android: to create new objects and to call
+			methods for them or existing DroidScript objects.
+		</p>
+
+		<p>The plugin has methods:</p>
+
+		<p>
+			1) Return version of plugin<br>
+			plg.GetVersion():float
+		</p>
+
+		<p>
+			2) Return list of methods for class with classSimpleName.<br>
+			classSimpleName is case sensitive.<br><br>
+			plg.GetMethods( (str):classSimpleName ):[str]
+		</p>
+
+		<p>
+			3) Creates an object.<br>
+			classSimpleName is case sensitive<br><br>
+			plg.CreateExtObject( (str):classSimpleName ):{};
+		</p>
+
+		<p>
+			4) Execute method. methodName and paramsTypesList are case sensitive.<br><br>
+			plg.RunMethod( {}:obj, str:methodName, [str]:paramsTypesList, p1, p2, p3, p4 ):str
+		</p>
+
+		<p>
+			5) Send object to plugin array for use it in method as parameter.<br>
+			Can send 4 objects in array. Sample:<br><br>
+
+			If object[0] != null then method use this object as first parameter, other
+			method use par1 from plg.RunMethod. Don't forget to clear the array object
+			using plg.SetParamObject( obj, -1 ) after the object is used in the method<br><br>
+
+			num >= 0 && num <= 3 - send object, other - clear objects array<br>
+			plg.SetParamObject( {}:obj, int:num );
+		</p>
+
+		<p>
+			6) Example event handlers SetOnTouch and SetOnDateChanged<br><br>
+
+			plg.SetOnEvent( {}:obj, str:eventName, callback )
+		</p>
+
+		<p>In order to use ExtUI, you must first load the plugin at the top of your script
+			using the <b>LoadPlugin</b> method like this:</p>
+
+		<div class="samp">&nbsp;app.LoadPlugin( "ExtUI" );</div>
+
+		<p>Then you can create an instance of the plugin object when you need it like this:</p>
+
+		<div class="samp">&nbsp;plg = app.CreateExtUI();</div>
+
+		<br>
+		<h3>GetVersion</h3>
+		<div data-role="collapsible" data-collapsed="true"  data-mini="true" data-theme="a" data-content-theme="b">
+			<h3>Example - GetVersion</h3>
+			<div id="examp1" style="font-size:70%">
+				app.LoadPlugin( "ExtUI" );<br>
+				<br>
+				function OnStart()<br>
+				{<br>
+				&nbsp;&nbsp;lay = app.CreateLayout( "Linear", "VCenter,FillXY" );<br><br>
+				&nbsp;&nbsp;btn = app.CreateButton( "Get plugin version" );<br>
+				&nbsp;&nbsp;btn.SetOnTouch( CallPlugin );<br>
+				&nbsp;&nbsp;lay.AddChild( btn );<br><br>
+
+				&nbsp;&nbsp;plg = app.CreateExtUI();<br>
+				<br>
+				&nbsp;&nbsp;app.AddLayout( lay );<br>
+				}<br>
+				<br>
+				function CallPlugin()<br>
+				{<br>
+				<b id="snip1"  style="font-size:100%">
+					&nbsp;&nbsp;alert( plg.GetVersion() );
+				</b>
+				<br>
+				}<br><br>
+
+			</div>
+			<div name="divCopy" align="right">
+				<a href="#" data-role="button" data-mini="true" data-inline="true" onclick="copy(snip1)">&nbsp;&nbsp;Copy&nbsp;&nbsp;</a>
+				<a href="#" data-role="button" data-mini="true" data-inline="true" onclick="copy(snip1)">Copy All</a>
+				<a href="#" data-role="button" data-mini="true" data-inline="true" onclick="demo(examp1)">&nbsp;&nbsp;&nbsp;Run&nbsp;&nbsp;&nbsp;</a>
+			</div>
+		</div>
+		<h3>GetMethods</h3>
+		<p>As a parameter you need specify exact object name of the widget class - EditText, NumberPicker, RadioButton and etc.</p>
+		<div data-role="collapsible" data-collapsed="true"  data-mini="true" data-theme="a" data-content-theme="b">
+			<h3>Example - GetMethods</h3>
+			<div id="examp2" style="font-size:70%">
+				app.LoadPlugin( "ExtUI" );<br>
+				<br>
+				function OnStart()<br>
+				{<br>
+				&nbsp;&nbsp;lay = app.CreateLayout( "Linear", "VCenter,FillXY" );<br><br>
+				&nbsp;&nbsp;btn = app.CreateButton( "Get methods" );<br>
+				&nbsp;&nbsp;btn.SetOnTouch( CallPlugin );<br>
+				&nbsp;&nbsp;lay.AddChild( btn );<br><br>
+
+				&nbsp;&nbsp;plg = app.CreateExtUI();<br>
+				<br>
+				&nbsp;&nbsp;app.AddLayout( lay );<br>
+				}<br>
+				<br>
+				function CallPlugin()<br>
+				{<br>
+				<b id="snip2"  style="font-size:100%">
+					&nbsp;&nbsp;alert( plg.GetMethods("Button").split("|").join("\n\n") );
+				</b>
+				<br>
+				}<br><br>
+
+			</div>
+			<div name="divCopy" align="right">
+				<a href="#" data-role="button" data-mini="true" data-inline="true" onclick="copy(snip2)">&nbsp;&nbsp;Copy&nbsp;&nbsp;</a>
+				<a href="#" data-role="button" data-mini="true" data-inline="true" onclick="copy(snip2)">Copy All</a>
+				<a href="#" data-role="button" data-mini="true" data-inline="true" onclick="demo(examp2)">&nbsp;&nbsp;&nbsp;Run&nbsp;&nbsp;&nbsp;</a>
+			</div>
+		</div>
+		<h3>CreateExtObject</h3>
+		<div data-role="collapsible" data-collapsed="true"  data-mini="true" data-theme="a" data-content-theme="b">
+			<h3>Example - CreateExtObject</h3>
+			<div id="examp3" style="font-size:70%">
+				app.LoadPlugin( "ExtUI" );<br>
+				<br>
+				function OnStart()<br>
+				{<br>
+
+
+				&nbsp;&nbsp;plg = app.CreateExtUI();<br>
+				<br>
+
+				&nbsp;&nbsp;lay = app.CreateLayout( "Linear", "VCenter,FillXY" );<br><br>
+				&nbsp;&nbsp;btn = app.CreateButton( "Create" );<br>
+				&nbsp;&nbsp;btn.SetOnTouch( function(){<br><br>
+				&nbsp;&nbsp;var _obj = plg.CreateExtObject( txe.GetText() );<br><br>
+				&nbsp;&nbsp;lay.AddChild( _obj );<br><br>
+				});<br><br>
+				<b id="snip3"  style="font-size:100%">
+					&nbsp;&nbsp;txe = app.CreateTextEdit( "Switch", 0.2, -1, "noSpell" );
+				</b>
+				<br><br>
+				&nbsp;&nbsp;lay.AddChild( txe );<br><br>
+				&nbsp;&nbsp;lay.AddChild( btn );<br><br>
+
+
+				&nbsp;&nbsp;app.AddLayout( lay );<br>
+				}<br>
+				<br>
+			</div>
+			<div name="divCopy" align="right">
+				<a href="#" data-role="button" data-mini="true" data-inline="true" onclick="copy(snip3)">&nbsp;&nbsp;Copy&nbsp;&nbsp;</a>
+				<a href="#" data-role="button" data-mini="true" data-inline="true" onclick="copy(snip3)">Copy All</a>
+				<a href="#" data-role="button" data-mini="true" data-inline="true" onclick="demo(examp3)">&nbsp;&nbsp;&nbsp;Run&nbsp;&nbsp;&nbsp;</a>
+			</div>
+		</div>
+		<p><h3>RunMethod</h3>
+		Method name and type of params are case sensitive.
+		(use GetMethods to view them)
+		The first four parameter is required.
+		The number of paramsType and parX must be equal.
+		If method has no params then paramsType must be empty string - "".
+		RunMethod return method result (for getters), empty or error.
+		</p>
+		<div data-role="collapsible" data-collapsed="true"  data-mini="true" data-theme="a" data-content-theme="b">
+			<h3>Example - RunMethod</h3>
+			<div id="examp4" style="font-size:70%">
+				app.LoadPlugin( "ExtUI" );<br>
+				<br>
+				function OnStart()<br>
+				{<br>
+				&nbsp;&nbsp;lay = app.CreateLayout( "Linear", "VCenter,FillXY" );<br><br>
+
+				&nbsp;&nbsp;plg = app.CreateExtUI();<br>
+				</b><br>
+				&nbsp;&nbsp;var _seekBar = plg.CreateExtObject("SeekBar");<br>
+
+				&nbsp;&nbsp;plg.RunMethod( _seekBar,"setRotation","float",-90);
+				<br>
+				&nbsp;&nbsp;_seekBar.SetSize( 0.3, -1 );
+				<br>
+				&nbsp;&nbsp;lay.AddChild( _seekBar );
+				<br><br>
+				&nbsp;&nbsp;app.AddLayout( lay );
+				<br><br>
+				<b id="snip4"  style="font-size:100%">
+					&nbsp;&nbsp;app.ShowPopup("Height of SeekBar = " + plg.RunMethod( _seekBar, "getWidth", "" ));
+				</b>
+				<br>
+				}<br>
+				<br>
+			</div>
+			<div name="divCopy" align="right">
+				<a href="#" data-role="button" data-mini="true" data-inline="true" onclick="copy(snip4)">&nbsp;&nbsp;Copy&nbsp;&nbsp;</a>
+				<a href="#" data-role="button" data-mini="true" data-inline="true" onclick="copy(snip4)">Copy All</a>
+				<a href="#" data-role="button" data-mini="true" data-inline="true" onclick="demo(examp4)">&nbsp;&nbsp;&nbsp;Run&nbsp;&nbsp;&nbsp;</a>
+			</div>
+		</div>
+
+		<div data-role="collapsible" data-collapsed="true"  data-mini="true" data-theme="a" data-content-theme="b">
+			<h3>Example - SetOnTouch</h3>
+			<div id="examp5" style="font-size:70%">
+				app.LoadPlugin( "ExtUI" );<br>
+				<br>
+				function OnStart()<br>
+				{<br>
+				&nbsp;&nbsp;lay = app.CreateLayout( "Linear", "VCenter,FillXY" );<br><br>
+
+				&nbsp;&nbsp;plg = app.CreateExtUI();<br>
+				</b><br>
+				&nbsp;&nbsp;var _datePicker = plg.CreateExtObject("DatePicker");<br>
+
+				&nbsp;&nbsp;plg.SetOnEvent( _datePicker, "SetOnDateChanged", event_dateChanged );
+				<br>
+				&nbsp;&nbsp;
+				<br>
+				&nbsp;&nbsp;lay.AddChild( _datePicker );
+				<br><br>
+				&nbsp;&nbsp;app.AddLayout( lay );
+				<br>
+				}<br><br>
+				function event_dateChanged( p_year, p_month, p_day )<br>
+				{<br>
+				<b id="snip5"  style="font-size:100%">
+					&nbsp;&nbsp;app.ShowPopup( "Date d.m.y: " + p_day + "." + p_month + "." + p_year );
+				</b>
+				<br>
+				}<br><br>
+				<br>
+			</div>
+			<div name="divCopy" align="right">
+				<a href="#" data-role="button" data-mini="true" data-inline="true" onclick="copy(snip5)">&nbsp;&nbsp;Copy&nbsp;&nbsp;</a>
+				<a href="#" data-role="button" data-mini="true" data-inline="true" onclick="copy(snip5)">Copy All</a>
+				<a href="#" data-role="button" data-mini="true" data-inline="true" onclick="demo(examp5)">&nbsp;&nbsp;&nbsp;Run&nbsp;&nbsp;&nbsp;</a>
+			</div>
+		</div>
+
+	</div><!-- /content -->
+
+</div><!-- /page -->
+
+</body>
+</html>
